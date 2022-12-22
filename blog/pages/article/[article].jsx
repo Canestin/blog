@@ -3,9 +3,11 @@ import { supabase } from "../../utils/supabase";
 import Layout from "../../layout/layout";
 import React from "react";
 import Head from "next/head";
+import formateDate from "../../functions/formatDate";
 
-export default function Article({ article }) {
-	console.log(article);
+export default function Article({ article, article2 }) {
+	const createdDate = formateDate(article.created_at);
+	console.log(article2);
 	return (
 		<>
 			<Head>
@@ -42,8 +44,8 @@ export default function Article({ article }) {
 								layout="responsive"
 							/>
 							<div className="flex column ml10 infos-author">
-								<span>Nom de l'auteur</span>
-								<span>{article.created_at}</span>
+								<span>{article.name_author}</span>
+								<span>{createdDate}</span>
 							</div>
 						</div>
 						<div className="article-img">
@@ -64,64 +66,40 @@ export default function Article({ article }) {
 									src="https://minimaltoolkit.com/images/randomdata/female/97.jpg"
 									layout="responsive"
 								/>
-								<span className="ml20">Nom de l'auteur</span>
+								<span className="ml20">{article.name_author}</span>
 							</div>
-							<div className="mt20">
-								Description de l'auteur ! Lorem ipsum dolor sit amet
-								consectetur, adipisicing elit. Perferendis repellat, quasi,
-								dolorem voluptaque!
-							</div>
+							<div className="mt20">{article.description_author}</div>
 						</div>
-
 						<span>Découvrir plus</span>
-						<div className="other-post flex space-between mt30">
-							<div className="col-9-sm">
-								<div className="flex gap items-center">
+						{article2.map((article) => (
+							<div
+								key={article.id}
+								className="other-post flex space-between mt30"
+							>
+								<div className="col-9-sm">
+									<div className="flex gap items-center">
+										<img
+											src={article.avatar_author}
+											className="rounded-sm object-cover border-radius"
+											width="30px"
+											height="30px"
+											layout="responsive"
+										/>
+										<small>{article.name_author}</small>
+									</div>
+									<h3>{article.description}</h3>
+								</div>
+								<div>
 									<img
-										src="https://miro.medium.com/focal/112/112/50/50/1*Qli89KYc6L7cTU2FkYaIfQ.jpeg"
-										className="rounded-sm object-cover border-radius"
-										width="30px"
-										height="30px"
+										src={article.imageUrl}
+										className="rounded-sm object-cover"
+										width="100px"
+										height="100px"
 										layout="responsive"
 									/>
-									<small>Nom de l'auteur</small>
 								</div>
-								<h3>Ici on aura la description d'un autre article</h3>
 							</div>
-							<div>
-								<img
-									src="https://www.lillydoo.com/assets/lillydoo/img/products/skincare/almond-oil/almond-oil-product-image-02.jpg"
-									className="rounded-sm object-cover"
-									width="100px"
-									height="100px"
-									layout="responsive"
-								/>
-							</div>
-						</div>
-						<div className="other-post flex space-between mt30">
-							<div className="col-9-sm">
-								<div className="flex gap items-center">
-									<img
-										src="https://miro.medium.com/focal/112/112/50/50/1*Qli89KYc6L7cTU2FkYaIfQ.jpeg"
-										className="rounded-sm object-cover border-radius"
-										width="30px"
-										height="30px"
-										layout="responsive"
-									/>
-									<small>Nom de l'auteur</small>
-								</div>
-								<h3>Ici on aura la description d'un autre article</h3>
-							</div>
-							<div>
-								<img
-									src="https://www.lillydoo.com/assets/lillydoo/img/products/skincare/almond-oil/almond-oil-product-image-02.jpg"
-									className="rounded-sm object-cover"
-									width="100px"
-									height="100px"
-									layout="responsive"
-								/>
-							</div>
-						</div>
+						))}
 					</div>
 				</div>
 			</Layout>
@@ -131,18 +109,25 @@ export default function Article({ article }) {
 
 export async function getServerSideProps({ params }) {
 	const { data: article, error } = await supabase
-		.from("articles")
+		.from("articles_view")
 		.select("*")
 		.eq("id", params.article)
 		.single();
 
-	if (error) {
+	const { data: article2, error2 } = await supabase
+		.from("articles_view")
+		.select("*")
+		.order("created_at", { ascending: false })
+		.limit(2);
+
+	if (error || error2) {
 		throw new Error(error);
 	}
 
 	return {
 		props: {
 			article,
+			article2,
 		},
 	};
 }
