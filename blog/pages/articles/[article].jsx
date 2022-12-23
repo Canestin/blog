@@ -18,7 +18,7 @@ export default function Article({ article, article2 }) {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<Layout>
-				<div id="top" className="pt-20">
+				{/* <div id="top" className="pt-20">
 					<div className="mx-auto bg-slate-900 w-full flex justify-center py-10">
 						<div className="relative flex gap items-center max-w-sm w-full h-12 rounded-3xl focus-within:shadow-lg  overflow-hidden">
 							<button className="grid place-items-center h-full w-12 text-gray-300 bg-white">
@@ -34,7 +34,7 @@ export default function Article({ article, article2 }) {
 							/>
 						</div>
 					</div>
-				</div>
+				</div> */}
 				<div className="container-article">
 					<div className="article-div">
 						<div className="author-left">
@@ -46,15 +46,15 @@ export default function Article({ article, article2 }) {
 								layout="responsive"
 							/>
 							<div className="flex column ml10 infos-author">
-								<span>{article.name_author}</span>
+								<span>{article.profiles.full_name}</span>
 								<span>{createdDate}</span>
 							</div>
 						</div>
 						<div className="article-img">
+							<h1 className="mt30 mb30">{article.title}</h1>
 							<img src={article.imageUrl} layout="responsive" />
 						</div>
 						<div className="article-itself">
-							<h1>{article.title}</h1>
 							<h2>{article.description}</h2>
 							<div className="article-section">
 								<p>{article.body}</p>
@@ -94,7 +94,7 @@ export default function Article({ article, article2 }) {
 						</div>
 						<span>Découvrir plus</span>
 						{article2.map((article) => (
-							<Link href={`/article/${article.id}`}>
+							<Link href={`/articles/${article.id}`}>
 								<div
 									key={article.id}
 									className="other-post flex space-between mt30"

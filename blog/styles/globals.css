@@ -579,7 +579,7 @@ button.primary,
 	padding-left: 60px;
 	border-left: 1px solid wheat;
 	position: sticky;
-	top: 100px;
+	top: 10px;
 }
 
 .author-left {
@@ -613,6 +613,7 @@ button.primary,
 
 .infos-author {
 	font-size: 14px;
+	border-bottom: 1px solid gray;
 }
 
 .infos-author span {

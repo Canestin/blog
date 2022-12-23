@@ -1,7 +1,7 @@
 import { FaSistrix } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { supabase } from "../utils/supabase";
+import { supabase } from "../../utils/supabase";
 
 export default function Articles() {
 	const [loading, setLoading] = useState(true);
@@ -78,7 +78,7 @@ export default function Articles() {
 						</div>
 						<div className="w-full h-auto flex items-center justify-center mb-2">
 							<button className="bg-sky-500 hover:bg-sky-500/50 text-white  p-0.5 rounded-sm flex items-center justify-center hover:scale-105 ease-in duration-300 cursor-pointer shadow-lg shadow-black-10  mb-2 ">
-								<Link href={`/article/${article.id}`}>
+								<Link href={`/articles/${article.id}`}>
 									<small>Read more ...</small>
 								</Link>
 							</button>
