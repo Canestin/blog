@@ -8,7 +8,7 @@ export default function Footer() {
 			<p className="font-semibold text-white uppercase mt-5 text-lg">
 				Nous contacter
 			</p>
-			<div class="flex items-center w-90 justify-between mt-4 max-w[330px] m-auto py-2 gap-7">
+			<div className="flex items-center w-90 justify-between mt-4 max-w[330px] m-auto py-2 gap-7">
 				<div className="rounded-full shadow-lg shadow-black-100 p-3 bg-sky-800 cursor-pointer hover:bg-slate-100 hover:scale-110 ease-in duration-300">
 					<Link href="https://www.linkedin.com/in/christ-rova-abessolo-903aa1244/">
 						<FaLinkedin size={30} />

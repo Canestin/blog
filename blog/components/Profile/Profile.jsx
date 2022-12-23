@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
-import Avatar from "./Avatar";
+import Avatar from "../Avatar/Avatar";
+import { Auth } from "@supabase/supabase-js";
 
 export default function Account({ session }) {
 	const supabase = useSupabaseClient();
@@ -35,7 +36,6 @@ export default function Account({ session }) {
 			}
 		} catch (error) {
 			alert("Error loading user data!");
-			console.log(error);
 		} finally {
 			setLoading(false);
 		}
@@ -58,7 +58,6 @@ export default function Account({ session }) {
 			alert("Profile updated!");
 		} catch (error) {
 			alert("Error updating the data!");
-			console.log(error);
 		} finally {
 			setLoading(false);
 		}

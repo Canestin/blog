@@ -2,6 +2,7 @@ import { supabase } from "../../../utils/supabase";
 import Layout from "../../../layout/layout";
 import React from "react";
 import Head from "next/head";
+import ArticleForm from "../../../components/ArticleForm/ArticleForm";
 
 export default function Post() {
 	async function handleSubmit(event) {
@@ -20,10 +21,9 @@ export default function Post() {
 			author: "07bf408c-a0c9-473e-8f9e-48a8f66c1ddb",
 		};
 		const { error } = await supabase.from("articles").insert(body);
-		console.log(body);
 
 		if (error) {
-			console.log("Oups !", error.message);
+			console.log("Oups ! ", error.message);
 		}
 	}
 
@@ -36,68 +36,8 @@ export default function Post() {
 			</Head>
 			<Layout>
 				<h4>On raconte quoi aujourd'hui ?</h4>
-				<div>
-					<form onSubmit={handleSubmit} className="form-add">
-						<input
-							required
-							type="text"
-							name="title"
-							placeholder="Tapez le titre de votre article"
-						/>
-						<input
-							type="url"
-							name="url"
-							placeholder="Inserez l'url de l'image representatrice de votre article"
-						/>
-						<input
-							required
-							type="text"
-							name="description"
-							placeholder="Tapez la description"
-						/>
-						<textarea
-							required
-							name="content"
-							rows="10"
-							cols="80"
-							placeholder="Tapez le contenu de la section 1"
-						></textarea>
-
-						<button className="buttonsend">Poster</button>
-					</form>
-				</div>
+				<ArticleForm handleSubmit={handleSubmit} />
 			</Layout>
 		</>
 	);
 }
-
-// export async function getServerSideProps({ params }) {
-// 	const { data: article, error } = await supabase
-// 		.from("articles")
-// 		.select("*")
-// 		.eq("id", params.article)
-// 		.single();
-
-// 	if (error) {
-// 		throw new Error(error);
-// 	}
-
-// 	return {
-// 		props: {
-// 			article,
-// 		},
-// 	};
-// }
-
-// export async function getStaticPaths() {
-// 	const { data } = await supabase.from("profiles").select("*");
-
-// 	const paths = data.map((item) => ({
-// 		params: { article: item.id.toString() },
-// 	}));
-
-// 	return {
-// 		paths,
-// 		fallback: false,
-// 	};
-// }

@@ -29,7 +29,7 @@ export default function Home({ articles }) {
 								<h3 className="my-5">
 									Le partage est l'un des principes les plus forts
 								</h3>
-								<button class="bg-white hover:bg-sky-500/10 hover:text-white mt-7 text-black  font-semibold  p-2 rounded-md flex items-center justify-center hover:scale-105 ease-in duration-300 cursor-pointer shadow-lg shadow-black-10  mb-2 ">
+								<button className="bg-white hover:bg-sky-500/10 hover:text-white mt-7 text-black  font-semibold  p-2 rounded-md flex items-center justify-center hover:scale-105 ease-in duration-300 cursor-pointer shadow-lg shadow-black-10  mb-2 ">
 									{/* link to the login page */}
 									<Link href="/login">
 										<small>Rediger...</small>
@@ -83,7 +83,7 @@ export default function Home({ articles }) {
 									</div>
 								</div>
 								<div className="w-full h-auto flex items-center justify-center">
-									<button class="bg-white hover:text-white hover:bg-sky-500/10 text-black font-semibold  p-2 rounded-md flex items-center justify-center hover:scale-105 ease-in duration-300 cursor-pointer shadow-lg shadow-black-10  mb-3 ">
+									<button className="bg-white hover:text-white hover:bg-sky-500/10 text-black font-semibold  p-2 rounded-md flex items-center justify-center hover:scale-105 ease-in duration-300 cursor-pointer shadow-lg shadow-black-10  mb-3 ">
 										<Link scroll={true} href={`/article/${article.id}#top`}>
 											<a>
 												<small>Read more ...</small>
@@ -113,7 +113,7 @@ export async function getStaticProps() {
 	const { data: articles, error } = await supabase
 		.from("articles")
 		.select("*")
-		.order("created_at", { ascending: false })
+		.order("created_at", { ascending: true })
 		.limit(3);
 
 	// const { data: auteur, error } = await supabase

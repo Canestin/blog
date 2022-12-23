@@ -23,25 +23,23 @@ export default function Articles() {
 
 			if (data) {
 				setArticles(data);
-				console.log(data);
 			}
 		} catch (error) {
 			alert("Error loading user data!");
-			console.log(error);
 		} finally {
 			setLoading(false);
 		}
 	}
 	return (
 		<div className="pt-20">
-			<div class=" mx-auto bg-slate-900 w-full flex justify-center py-10 ">
-				<div class="relative flex items-center max-w-sm w-full h-12 rounded-3xl focus-within:shadow-lg  overflow-hidden">
-					<button class="grid place-items-center h-full w-12 text-gray-300 mr30 bg-white">
+			<div className=" mx-auto bg-slate-900 w-full flex justify-center py-10 ">
+				<div className="relative flex items-center max-w-sm w-full h-12 rounded-3xl focus-within:shadow-lg  overflow-hidden">
+					<button className="grid place-items-center h-full w-12 text-gray-300 mr30 bg-white">
 						<FaSistrix size={23} />
 					</button>
 
 					<input
-						class="peer h-full w-full outline-none bg-white text-black text-md
+						className="peer h-full w-full outline-none bg-white text-black text-md
 						 font-semibold pl-3"
 						type="text"
 						id="value"
@@ -79,7 +77,7 @@ export default function Articles() {
 							</div>
 						</div>
 						<div className="w-full h-auto flex items-center justify-center mb-2">
-							<button class="bg-sky-500 hover:bg-sky-500/50 text-white  p-0.5 rounded-sm flex items-center justify-center hover:scale-105 ease-in duration-300 cursor-pointer shadow-lg shadow-black-10  mb-2 ">
+							<button className="bg-sky-500 hover:bg-sky-500/50 text-white  p-0.5 rounded-sm flex items-center justify-center hover:scale-105 ease-in duration-300 cursor-pointer shadow-lg shadow-black-10  mb-2 ">
 								<Link href={`/article/${article.id}`}>
 									<small>Read more ...</small>
 								</Link>

@@ -1,13 +1,15 @@
 import { FaSistrix } from "react-icons/fa";
+import { BiSend } from "react-icons/bi";
 import { supabase } from "../../utils/supabase";
 import Layout from "../../layout/layout";
 import React from "react";
 import Head from "next/head";
 import formateDate from "../../functions/formatDate";
+import Link from "next/link";
 
 export default function Article({ article, article2 }) {
 	const createdDate = formateDate(article.created_at);
-	console.log(article2);
+	console.log(article);
 	return (
 		<>
 			<Head>
@@ -37,7 +39,7 @@ export default function Article({ article, article2 }) {
 					<div className="article-div">
 						<div className="author-left">
 							<img
-								src="https://minimaltoolkit.com/images/randomdata/female/97.jpg"
+								src={article.profiles.avatar_url}
 								className="rounded-sm object-cover"
 								width="50px"
 								height="50px"
@@ -58,47 +60,69 @@ export default function Article({ article, article2 }) {
 								<p>{article.body}</p>
 							</div>
 						</div>
+						<div className="add-comment">
+							<form className="form-comment">
+								<textarea
+									type="text"
+									name="addcomment"
+									placeholder="Ajouter un commentaire..."
+								/>
+							</form>
+							<button className="send-comment">
+								<BiSend size={30} />
+							</button>
+						</div>
+						<div className="comments">
+							{article.comments_view.map((comment) => (
+								<div className="mb20 each-comment">
+									<div className="comment-img">
+										<img src={comment.avatar_author} layout="responsive" />
+										<span className="ml20">{comment.name_author}</span>
+									</div>
+									<div className="mt10">{comment.content}</div>
+								</div>
+							))}
+						</div>
 					</div>
 					<div className="user-div">
 						<div className="mb50">
 							<div className="user-right-img">
-								<img
-									src="https://minimaltoolkit.com/images/randomdata/female/97.jpg"
-									layout="responsive"
-								/>
-								<span className="ml20">{article.name_author}</span>
+								<img src={article.profiles.avatar_url} layout="responsive" />
+								<span className="ml20">{article.profiles.full_name}</span>
 							</div>
-							<div className="mt20">{article.description_author}</div>
+							<div className="mt20">{article.profiles.description}</div>
 						</div>
 						<span>Découvrir plus</span>
 						{article2.map((article) => (
-							<div
-								key={article.id}
-								className="other-post flex space-between mt30"
-							>
-								<div className="col-9-sm">
-									<div className="flex gap items-center">
+							<Link href={`/article/${article.id}`}>
+								<div
+									key={article.id}
+									className="other-post flex space-between mt30"
+								>
+									<div className="col-9-sm">
+										<div className="flex gap items-center">
+											<img
+												src={article.avatar_author}
+												className="rounded-sm object-cover border-radius"
+												width="30px"
+												height="30px"
+												layout="responsive"
+											/>
+											<small>{article.name_author}</small>
+										</div>
+										<h3>{article.description}</h3>
+									</div>
+									<div>
 										<img
-											src={article.avatar_author}
-											className="rounded-sm object-cover border-radius"
-											width="30px"
-											height="30px"
+											src={article.imageUrl}
+											className="rounded-sm object-cover"
+											width="100px"
+											height="100px"
 											layout="responsive"
 										/>
-										<small>{article.name_author}</small>
 									</div>
-									<h3>{article.description}</h3>
 								</div>
-								<div>
-									<img
-										src={article.imageUrl}
-										className="rounded-sm object-cover"
-										width="100px"
-										height="100px"
-										layout="responsive"
-									/>
-								</div>
-							</div>
+							</Link>
 						))}
 					</div>
 				</div>
@@ -109,19 +133,19 @@ export default function Article({ article, article2 }) {
 
 export async function getServerSideProps({ params }) {
 	const { data: article, error } = await supabase
-		.from("articles_view")
-		.select("*")
+		.from("articles")
+		.select("*, comments_view(*), profiles(*)")
 		.eq("id", params.article)
 		.single();
 
 	const { data: article2, error2 } = await supabase
 		.from("articles_view")
 		.select("*")
-		.order("created_at", { ascending: false })
+		.order("created_at", { ascending: true })
 		.limit(2);
 
 	if (error || error2) {
-		throw new Error(error);
+		throw new Error("Error !");
 	}
 
 	return {

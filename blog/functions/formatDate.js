@@ -6,7 +6,7 @@ export default function formateDate(myDate) {
 	const hour = date.getHours();
 	const minutes = date.getMinutes();
 	const createdDate =
-		month + "/" + day + "/" + year + " - " + hour + ":" + minutes;
+		day + "/" + month + "/" + year + " - " + hour + ":" + minutes;
 
 	return createdDate;
 }

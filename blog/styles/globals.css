@@ -49,7 +49,7 @@
 
 * {
 	color: var(--custom-color);
-	font-family: var(--custom-font-family);
+	font-family: fangsong;
 	box-sizing: border-box;
 }
 
@@ -579,7 +579,7 @@ button.primary,
 	padding-left: 60px;
 	border-left: 1px solid wheat;
 	position: sticky;
-	top: 50px;
+	top: 100px;
 }
 
 .author-left {
@@ -664,13 +664,73 @@ button.primary,
 
 .form-add input,
 textarea {
-	background-color: rgb(211, 201, 201);
+	background-color: white;
 	width: 100%;
 	margin-bottom: 20px;
-	font-size: 20px;
+	font-size: 30px;
+	outline: none !important;
 }
 
 .buttonsend {
 	background-color: rgb(151, 166, 161);
 	padding: 20px 50px;
+}
+
+.comments {
+	background-color: rgb(227, 247, 253);
+	padding: 20px;
+	width: 100%;
+	margin-bottom: 100px;
+}
+
+.each-comment {
+	border-bottom: 1px solid gray;
+	padding-bottom: 10px;
+}
+
+.comment-img img {
+	object-fit: cover;
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+}
+
+.comment-img span {
+	font-size: 10px;
+	margin-left: 0;
+}
+
+.add-comment {
+}
+.add-comment textarea {
+	border: 0;
+	outline: 0;
+	font-size: 18px;
+	padding: 20px;
+	background-color: white;
+}
+
+.add-comment textarea:focus {
+	outline: none !important;
+}
+
+.form-comment {
+	background-color: yellow;
+}
+.send-comment {
+	background-color: blue;
+	position: absolute;
+	bottom: 10px;
+	right: 20px;
+}
+
+.other-post {
+	cursor: pointer;
+	padding: 10px;
+	border-radius: 5px;
+	transition: all 0.2s;
+}
+
+.other-post:hover {
+	box-shadow: 3px 3px 0.4em black;
 }
