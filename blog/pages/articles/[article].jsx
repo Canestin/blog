@@ -5,11 +5,35 @@ import Layout from "../../layout/layout";
 import React from "react";
 import Head from "next/head";
 import formateDate from "../../functions/formatDate";
+import { useUser } from "@supabase/auth-helpers-react";
 import Link from "next/link";
 
 export default function Article({ article, article2 }) {
+	const currentUser = useUser();
 	const createdDate = formateDate(article.created_at);
 	console.log(article);
+	console.log("Current User !", currentUser);
+
+	async function handleSubmit(event) {
+		event.preventDefault();
+
+		const article_id = article.id;
+		const content = event.target.addcomment.value;
+
+		const body = {
+			content,
+			article_id,
+			user_id: currentUser.id,
+		};
+
+		const { error } = await supabase.from("comments").insert(body);
+
+		if (error) {
+			console.log("Oups ! ", error.message);
+		} else {
+			console.log("Commentaire envoyé avec succès !");
+		}
+	}
 	return (
 		<>
 			<Head>
@@ -61,16 +85,19 @@ export default function Article({ article, article2 }) {
 							</div>
 						</div>
 						<div className="add-comment">
-							<form className="form-comment">
+							<div>
+								<img src={currentUser.id} />
+							</div>
+							<form onSubmit={handleSubmit} className="form-comment">
 								<textarea
 									type="text"
 									name="addcomment"
 									placeholder="Ajouter un commentaire..."
 								/>
+								<button className="send-comment">
+									<BiSend size={30} />
+								</button>
 							</form>
-							<button className="send-comment">
-								<BiSend size={30} />
-							</button>
 						</div>
 						<div className="comments">
 							{article.comments_view.map((comment) => (

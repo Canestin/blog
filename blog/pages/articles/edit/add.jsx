@@ -18,7 +18,7 @@ export default function Post() {
 			body: content,
 			description,
 			imageUrl,
-			author: "07bf408c-a0c9-473e-8f9e-48a8f66c1ddb",
+			author: "07bf408c-a0c9-473e-8f9e-48a8f66c1ddb", // auth.uid() @ToReplace
 		};
 		const { error } = await supabase.from("articles").insert(body);
 

@@ -595,15 +595,16 @@ button.primary,
 	margin-left: 10px;
 }
 
-.article-img {
-	width: 100%;
-	height: 400px;
-}
-
 .article-img img {
 	object-fit: cover;
 	width: 100%;
 	height: 400px;
+	transition: all 0.2s;
+}
+
+.article-img img:hover {
+	transform: scale(0.98);
+	border-radius: 10px;
 }
 
 .article-itself {
@@ -621,21 +622,21 @@ button.primary,
 	padding-bottom: 2px;
 }
 
-.article-itself h1 {
+/* .article-itself h1 {
 	font-size: 45px;
 	text-align: center;
 	padding-top: 50px;
-}
+} */
 
 .article-itself > h2 {
-	padding-top: 10px;
-	font-size: 35px;
+	padding-top: 50px;
+	font-size: 30px;
 	text-align: center;
-	color: rgb(208, 203, 203);
+	color: rgb(47, 45, 45);
 }
 
 .article-section {
-	padding: 70px 30px;
+	padding: 10px 30px 70px 30px;
 }
 .article-section h2 {
 	padding: 0;
@@ -716,13 +717,12 @@ textarea {
 }
 
 .form-comment {
-	background-color: yellow;
+	position: relative;
 }
 .send-comment {
-	background-color: blue;
 	position: absolute;
 	bottom: 10px;
-	right: 20px;
+	right: 10px;
 }
 
 .other-post {
