@@ -1,8 +1,10 @@
 import { Auth, ThemeSupa } from "@supabase/auth-ui-react";
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
-import Account from "../components/Profile/Profile";
+import Profile from "../components/Profile/Profile";
+import { useRouter } from "next/router";
 
 export default function Login() {
+	const route = useRouter();
 	const session = useSession();
 	const supabase = useSupabaseClient();
 
@@ -17,7 +19,8 @@ export default function Login() {
 						theme="dark"
 					/>
 				) : (
-					<Account session={session} />
+					() => route.push("/profile")
+					// <Profile session={session} />
 				)}
 			</div>
 		</div>

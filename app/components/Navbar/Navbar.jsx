@@ -4,10 +4,11 @@ import Link from "next/link";
 import logo from "../../public/images/logo4.png";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import { FaGithub, FaLinkedin, FaAt, FaMobileAlt } from "react-icons/fa";
+import { useUser } from "@supabase/auth-helpers-react";
 
 export default function Navbar() {
 	const [navbar, setNavbar] = useState(false);
-
+	const currentUser = useUser();
 	const handleNav = () => {
 		setNavbar(!navbar);
 	};
@@ -39,11 +40,19 @@ export default function Navbar() {
 								Contact
 							</li>
 						</Link>
-						<Link href="/login">
-							<li className="ml-10 uppercase hover:border-b-2 cursor-pointer">
-								Se connecter
-							</li>
-						</Link>
+						{!currentUser ? (
+							<Link href="/login">
+								<li className="ml-10 uppercase hover:border-b-2 cursor-pointer">
+									Se connecter
+								</li>
+							</Link>
+						) : (
+							<Link href="/profile">
+								<li className="ml-10 uppercase hover:border-b-2 cursor-pointer">
+									Mon profile
+								</li>
+							</Link>
+						)}
 					</ul>
 					<div className="md:hidden transition md:ease-in" onClick={handleNav}>
 						<AiOutlineMenu size={30} />
