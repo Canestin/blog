@@ -8,8 +8,9 @@ import Layout from "../../layout/layout";
 import { supabase } from "../../utils/supabase";
 
 export default function Article({ article, article2 }) {
-	console.log(article);
+	console.log("Mon article !", article);
 	const [comments, setComments] = useState(article.comments_view.reverse());
+	console.log("Nos comments qui devrait etre vrai !", article.comments_view);
 	console.log("Nos comments !", comments);
 	useEffect(() => {
 		const comments = supabase
@@ -31,7 +32,7 @@ export default function Article({ article, article2 }) {
 			.subscribe();
 
 		return () => comments.unsubscribe();
-	}, []);
+	}, [article.id]);
 	const currentUser = useUser();
 	const createdDate = formateDate(article.created_at);
 
@@ -63,7 +64,7 @@ export default function Article({ article, article2 }) {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<Layout>
-				<div id="top" className="container-article">
+				<div className="container-article">
 					<div className="article-div">
 						<div className="author-left">
 							<img
@@ -128,7 +129,7 @@ export default function Article({ article, article2 }) {
 							<Link href={`/articles/${article.id}#top`}>
 								<div
 									key={article.id}
-									className="other-post flex space-between mt30"
+									className="other-post flex space-between mt10"
 								>
 									<div className="col-9-sm">
 										<div className="flex gap items-center">
@@ -170,10 +171,9 @@ export async function getServerSideProps({ params }) {
 		.single();
 
 	const { data: article2, error2 } = await supabase
-		.from("articles_view")
+		.from("random_articles_view")
 		.select("*")
-		.order("created_at", { ascending: true })
-		.limit(2);
+		.limit(3);
 
 	if (error || error2) {
 		throw new Error("Error !");
