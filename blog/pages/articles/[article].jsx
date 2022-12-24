@@ -1,18 +1,39 @@
-import { FaSistrix } from "react-icons/fa";
-import { BiSend } from "react-icons/bi";
-import { supabase } from "../../utils/supabase";
-import Layout from "../../layout/layout";
-import React from "react";
-import Head from "next/head";
-import formateDate from "../../functions/formatDate";
 import { useUser } from "@supabase/auth-helpers-react";
+import Head from "next/head";
 import Link from "next/link";
+import React, { useEffect, useState } from "react";
+import { BiSend } from "react-icons/bi";
+import formateDate from "../../functions/formatDate";
+import Layout from "../../layout/layout";
+import { supabase } from "../../utils/supabase";
 
 export default function Article({ article, article2 }) {
+	console.log(article);
+	const [comments, setComments] = useState(article.comments_view.reverse());
+	console.log("Nos comments !", comments);
+	useEffect(() => {
+		const comments = supabase
+			.channel("custom-all-channel")
+			.on(
+				"postgres_changes",
+				{ event: "*", schema: "public", table: "comments" },
+				async (payload) => {
+					console.log("Change received!", payload);
+					const { data: newComment, error } = await supabase
+						.from("comments_view")
+						.select("*")
+						.eq("id", payload.new.id)
+						.single();
+
+					setComments((comments) => [newComment, ...comments]);
+				}
+			)
+			.subscribe();
+
+		return () => comments.unsubscribe();
+	}, []);
 	const currentUser = useUser();
 	const createdDate = formateDate(article.created_at);
-	console.log(article);
-	console.log("Current User !", currentUser);
 
 	async function handleSubmit(event) {
 		event.preventDefault();
@@ -42,24 +63,7 @@ export default function Article({ article, article2 }) {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<Layout>
-				{/* <div id="top" className="pt-20">
-					<div className="mx-auto bg-slate-900 w-full flex justify-center py-10">
-						<div className="relative flex gap items-center max-w-sm w-full h-12 rounded-3xl focus-within:shadow-lg  overflow-hidden">
-							<button className="grid place-items-center h-full w-12 text-gray-300 bg-white">
-								<FaSistrix size={23} />
-							</button>
-
-							<input
-								className="peer h-full w-full outline-none bg-white text-black text-md
-						 		font-semibold pl-3"
-								type="text"
-								id="value"
-								placeholder="Search something..."
-							/>
-						</div>
-					</div>
-				</div> */}
-				<div className="container-article">
+				<div id="top" className="container-article">
 					<div className="article-div">
 						<div className="author-left">
 							<img
@@ -86,7 +90,7 @@ export default function Article({ article, article2 }) {
 						</div>
 						<div className="add-comment">
 							<div>
-								<img src={currentUser.id} />
+								<img src="" />
 							</div>
 							<form onSubmit={handleSubmit} className="form-comment">
 								<textarea
@@ -100,7 +104,7 @@ export default function Article({ article, article2 }) {
 							</form>
 						</div>
 						<div className="comments">
-							{article.comments_view.map((comment) => (
+							{comments.map((comment) => (
 								<div className="mb20 each-comment">
 									<div className="comment-img">
 										<img src={comment.avatar_author} layout="responsive" />
@@ -121,7 +125,7 @@ export default function Article({ article, article2 }) {
 						</div>
 						<span>Découvrir plus</span>
 						{article2.map((article) => (
-							<Link href={`/articles/${article.id}`}>
+							<Link href={`/articles/${article.id}#top`}>
 								<div
 									key={article.id}
 									className="other-post flex space-between mt30"
