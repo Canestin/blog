@@ -622,15 +622,14 @@ button.primary,
 	padding-bottom: 2px;
 }
 
-.article-itself > h2 {
+.article-itself > h3 {
 	padding-top: 50px;
-	font-size: 30px;
-	text-align: center;
+	font-size: 23px;
 	color: rgb(47, 45, 45);
 }
 
 .article-section {
-	padding: 10px 30px 70px 30px;
+	padding: 10px 0px 70px 0px;
 }
 .article-section h2 {
 	padding: 0;
@@ -640,12 +639,14 @@ button.primary,
 .article-section p {
 	margin-bottom: 40px;
 	line-height: 35px;
+	font-size: 18px;
 }
 .user-right-img img {
 	width: 150px;
 	height: 150px;
 	object-fit: cover;
 	border-radius: 50%;
+	margin-bottom: 10px;
 }
 
 .form-add {

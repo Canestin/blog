@@ -1,35 +1,8 @@
 import { FaSistrix } from "react-icons/fa";
-import { useState, useEffect } from "react";
 import Link from "next/link";
 import { supabase } from "../../utils/supabase";
 
-export default function Articles() {
-	const [loading, setLoading] = useState(true);
-	const [articles, setArticles] = useState([]);
-
-	useEffect(() => {
-		getArticle();
-	}, []);
-
-	async function getArticle() {
-		try {
-			setLoading(true);
-
-			let { data, error, status } = await supabase.from("articles").select("*");
-
-			if (error && status !== 406) {
-				throw error;
-			}
-
-			if (data) {
-				setArticles(data);
-			}
-		} catch (error) {
-			alert("Error loading user data!");
-		} finally {
-			setLoading(false);
-		}
-	}
+export default function Articles({ articles }) {
 	return (
 		<div className="pt-20">
 			<div className=" mx-auto bg-slate-900 w-full flex justify-center py-10 ">
@@ -62,14 +35,6 @@ export default function Articles() {
 									height="100%"
 									layout="responsive"
 								/>
-
-								{/* <p className="py-1">
-									Source:{" "}
-									<span className="text-lg font-medium text-teal-600 py-1">
-										{article.author}
-									</span>
-								</p> */}
-
 								<p className="text-gray-89 py-1">{article.title}</p>
 								<p className="text-gray-89 py-1 mb-2 text-justify text-lg font-medium max-w-2xl mx-auto">
 									{article.description.slice(0, 80) + "..."}
@@ -88,4 +53,21 @@ export default function Articles() {
 			</div>
 		</div>
 	);
+}
+
+export async function getServerSideProps({ params }) {
+	const { data: articles, error } = await supabase
+		.from("articles")
+		.select("*")
+		.order("created_at", { ascending: false });
+
+	if (error) {
+		throw new Error(error);
+	}
+
+	return {
+		props: {
+			articles,
+		},
+	};
 }

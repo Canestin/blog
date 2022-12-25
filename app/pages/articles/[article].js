@@ -7,54 +7,54 @@ import formateDate from "../../functions/formatDate";
 import Layout from "../../layout/layout";
 import { supabase } from "../../utils/supabase";
 
-export default function Article({ article, article2 }) {
-	console.log("Mon article !", article);
-	const [comments, setComments] = useState(article.comments_view.reverse());
-	console.log("Nos comments qui devrait etre vrai !", article.comments_view);
-	console.log("Nos comments !", comments);
+export default function Article({ currentArticle, articles }) {
+	const currentUser = useUser();
+	const [comments, setComments] = useState(
+		currentArticle.comments_view.reverse()
+	);
+	console.log("Comments de chez comments !", comments);
+
+	// currentArticle.comments_view.reverse();
+
 	useEffect(() => {
-		const comments = supabase
-			.channel("custom-all-channel")
+		const comment = supabase
+			.channel("comments")
 			.on(
 				"postgres_changes",
 				{ event: "*", schema: "public", table: "comments" },
 				async (payload) => {
-					console.log("Change received!", payload);
-					const { data: newComment, error } = await supabase
+					const { data: newComment } = await supabase
 						.from("comments_view")
 						.select("*")
 						.eq("id", payload.new.id)
 						.single();
 
-					setComments((comments) => [newComment, ...comments]);
+					setComments([newComment, ...comments]);
 				}
 			)
 			.subscribe();
 
-		return () => comments.unsubscribe();
-	}, [article.id]);
-	const currentUser = useUser();
-	const createdDate = formateDate(article.created_at);
+		return () => comment.unsubscribe();
+	}, [currentArticle]);
+
+	const createdDate = formateDate(currentArticle.created_at);
 
 	async function handleSubmit(event) {
 		event.preventDefault();
 
-		const article_id = article.id;
-		const content = event.target.addcomment.value;
-
 		const body = {
-			content,
-			article_id,
+			content: event.target.addcomment.value,
+			article_id: currentArticle.id,
 			user_id: currentUser.id,
 		};
 
 		const { error } = await supabase.from("comments").insert(body);
 
 		if (error) {
-			console.log("Oups ! ", error.message);
-		} else {
-			console.log("Commentaire envoyé avec succès !");
+			throw new Error(error.message);
 		}
+
+		// setComments([body, ...comments]);
 	}
 	return (
 		<>
@@ -68,25 +68,25 @@ export default function Article({ article, article2 }) {
 					<div className="article-div">
 						<div className="author-left">
 							<img
-								src={article.profiles.avatar_url}
+								src={currentArticle.profiles.avatar_url}
 								className="rounded-sm object-cover"
 								width="50px"
 								height="50px"
 								layout="responsive"
 							/>
 							<div className="flex column ml10 infos-author">
-								<span>{article.profiles.full_name}</span>
-								<span>{createdDate}</span>
+								<span>{currentArticle.profiles.full_name}</span>
+								<span className="text-sky-500">{createdDate}</span>
 							</div>
 						</div>
 						<div className="article-img">
-							<h1 className="mt30 mb30">{article.title}</h1>
-							<img src={article.imageUrl} layout="responsive" />
+							<h2 className="mt30 mb30">{currentArticle.title}</h2>
+							<img src={currentArticle.imageUrl} layout="responsive" />
 						</div>
 						<div className="article-itself">
-							<h2>{article.description}</h2>
+							<h3>{currentArticle.description}</h3>
 							<div className="article-section">
-								<p>{article.body}</p>
+								<p>{currentArticle.body}</p>
 							</div>
 						</div>
 						<div className="add-comment">
@@ -119,13 +119,18 @@ export default function Article({ article, article2 }) {
 					<div className="user-div">
 						<div className="mb50">
 							<div className="user-right-img">
-								<img src={article.profiles.avatar_url} layout="responsive" />
-								<span className="ml20">{article.profiles.full_name}</span>
+								<img
+									src={currentArticle.profiles.avatar_url}
+									layout="responsive"
+								/>
+								<span className="ml20 text-sky-500">
+									{currentArticle.profiles.full_name}
+								</span>
 							</div>
-							<div className="mt20">{article.profiles.description}</div>
+							<div className="mt20 ">{currentArticle.profiles.description}</div>
 						</div>
 						<span>Découvrir plus</span>
-						{article2.map((article) => (
+						{articles.map((article) => (
 							<Link href={`/articles/${article.id}#top`}>
 								<div
 									key={article.id}
@@ -140,9 +145,11 @@ export default function Article({ article, article2 }) {
 												height="30px"
 												layout="responsive"
 											/>
-											<small>{article.name_author}</small>
+											<small className="text-sky-500">
+												{article.name_author}
+											</small>
 										</div>
-										<h3>{article.description}</h3>
+										<h3>{article.description.slice(0, 50) + "..."}</h3>
 									</div>
 									<div>
 										<img
@@ -164,25 +171,28 @@ export default function Article({ article, article2 }) {
 }
 
 export async function getServerSideProps({ params }) {
-	const { data: article, error } = await supabase
+	const { data: currentArticle, error1 } = await supabase
 		.from("articles")
 		.select("*, comments_view(*), profiles(*)")
 		.eq("id", params.article)
 		.single();
 
-	const { data: article2, error2 } = await supabase
+	const { data: articles, error2 } = await supabase
 		.from("random_articles_view")
 		.select("*")
 		.limit(3);
 
-	if (error || error2) {
-		throw new Error("Error !");
+	if (error1) {
+		throw new Error("Error 1");
+	}
+	if (error2) {
+		throw new Error("Error 2");
 	}
 
 	return {
 		props: {
-			article,
-			article2,
+			currentArticle,
+			articles,
 		},
 	};
 }

@@ -13,7 +13,7 @@ export default function Navbar() {
 		setNavbar(!navbar);
 	};
 	return (
-		<div id="top" className="w-full h-20 shadow-2xl z-[100]">
+		<div id="top" className="w-full h-20 drop-shadow-md z-[100]">
 			<div className="flex w-full h-full pl-5 pr-10 2xl:px-16 !bg-slate-900 !text-white items-center justify-between">
 				<Link href="/">
 					<Image src={logo} width={90} height={50} />
