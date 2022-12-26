@@ -75,12 +75,6 @@ export default function Home({ articles }) {
 											height="100%"
 											layout="responsive"
 										/>
-										{/* <p className="py-1">
-											Auteur:{" "}
-											<span className="text-lg font-medium text-teal-600 py-1">
-												{article.author}
-											</span>
-										</p> */}
 										<p className="text-gray-89 py-1">{article.title}</p>
 										<p className="text-gray-89 py-1 mb-2 text-justify text-lg font-medium max-w-2xl mx-auto">
 											{article.body.slice(0, 30) + " ....."}
