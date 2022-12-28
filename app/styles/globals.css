@@ -753,3 +753,8 @@ textarea {
 	padding: 30px;
 	margin-left: 20px;
 }
+
+.flex-articles {
+	display: grid;
+	grid-template-columns: 200px 200px 200px;
+}

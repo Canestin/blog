@@ -2,8 +2,27 @@ import { FaSistrix } from "react-icons/fa";
 import Link from "next/link";
 import { supabase } from "../../utils/supabase";
 import Layout from "../../layout/layout";
+import { useState } from "react";
 
-export default function Articles({ articles }) {
+export default function Articles({ arts }) {
+	const [articles, setArticles] = useState(arts);
+
+	console.log("Articles de cbez articles", arts);
+
+	function handleChange(event) {
+		const term = event.target.value.toLowerCase();
+
+		const articlesMatch = arts.filter(
+			(a) =>
+				a.body.toLowerCase().includes(term) ||
+				a.description.toLowerCase().includes(term) ||
+				a.title.includes(term)
+		);
+
+		setArticles(articlesMatch);
+
+		console.log("articlesMatch", articlesMatch);
+	}
 	return (
 		<Layout>
 			<div className="pt-20">
@@ -14,6 +33,7 @@ export default function Articles({ articles }) {
 						</button>
 
 						<input
+							onChange={handleChange}
 							className="peer h-full w-full outline-none bg-white text-black text-md
 						 font-semibold pl-3"
 							type="text"
@@ -25,7 +45,7 @@ export default function Articles({ articles }) {
 				<div className="flex px-20 py-10 gap-16 md:flex-row md:flex-wrap bg-gray-300 dark:!bg-slate-900 ms:flex-col sm:flex-col min-w-[10%]:flex-col ">
 					{articles.map((article) => (
 						<div className="basis-1/4 shadow-lg px-10 pt-5  pb-16 rounded-sm my-5 dark:text-black flex-1 dark:bg-stone-300 hover:bg-slate-100 hover:scale-105 ease-in duration-300 ">
-							<div className="flex-col gap-10 lg:flex-row lg:flex-wrap   h-full">
+							<div className="">
 								<div
 									key={article.id}
 									className=" text-center  flex flex-col justify-center pb-O items-center "
@@ -59,7 +79,7 @@ export default function Articles({ articles }) {
 }
 
 export async function getServerSideProps({ params }) {
-	const { data: articles, error } = await supabase
+	const { data: arts, error } = await supabase
 		.from("articles")
 		.select("*")
 		.order("created_at", { ascending: false });
@@ -70,7 +90,7 @@ export async function getServerSideProps({ params }) {
 
 	return {
 		props: {
-			articles,
+			arts,
 		},
 	};
 }

@@ -12,20 +12,19 @@ export default function ProfilePage() {
 
 	useEffect(() => {
 		if (user) {
-			console.log(user);
+			supabase
+				.from("profiles")
+				.select("*, articles(*)")
+				.eq("user_id", user.id)
+				.single()
+				.then((res) => {
+					console.log("Data de chez Data !", res);
+					setArticles(res.data);
+				})
+				.catch((error) => {
+					console.log(error);
+				});
 		}
-		supabase
-			.from("profiles")
-			.select("*, articles(*)")
-			.eq("user_id", user.id)
-			.single()
-			.then((res) => {
-				console.log("Data de chez Data !", res);
-				setArticles(res.data);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
 	}, [user]);
 	return (
 		<>
