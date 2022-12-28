@@ -92,7 +92,7 @@ export default function Navbar() {
 								</li>
 							</Link>
 						) : (
-							<Link href="/profile">
+							<Link href={`/profile/${currentUser.id}`}>
 								<li className="ml-10 uppercase hover:border-b-4 dark:hover:border-white hover:border-black  cursor-pointer">
 									Mon profil
 								</li>
