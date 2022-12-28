@@ -7,8 +7,6 @@ import { useState } from "react";
 export default function Articles({ arts }) {
 	const [articles, setArticles] = useState(arts);
 
-	console.log("Articles de cbez articles", arts);
-
 	function handleChange(event) {
 		const term = event.target.value.toLowerCase();
 
@@ -20,8 +18,6 @@ export default function Articles({ arts }) {
 		);
 
 		setArticles(articlesMatch);
-
-		console.log("articlesMatch", articlesMatch);
 	}
 	return (
 		<Layout>
